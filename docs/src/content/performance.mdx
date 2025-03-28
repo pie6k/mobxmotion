@@ -1,0 +1,23 @@
+# Performance
+
+Stylings primitives are heavily optimized for performance.
+
+```tsx
+import { $flex } from "mobxmotion";
+
+console.time("flex");
+
+for (let i = 0; i < 1_000_000; i++) {
+  $flex.gap(i).vertical.alignCenter.justifyAround.compile();
+}
+
+console.timeEnd("flex");
+// flex: 393.7880859375 ms
+// M3 Max MacBook Pro
+```
+
+This is not very advanced benchmark, but in this example:
+
+- we are creating 1 million of different styles
+- we exit cached path early (as `.gap()` is used at the start with a new value)
+- we use bunch of modifiers and then compile it into the final CSS

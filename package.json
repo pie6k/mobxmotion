@@ -1,0 +1,17 @@
+{
+  "name": "mobxmotion-root",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "mobxmotion",
+      "docs"
+    ]
+  },
+  "scripts": {
+    "mobxmotion": "yarn workspace mobxmotion",
+    "docs": "yarn workspace mobxmotion-docs"
+  },
+  "packageManager": "yarn@4.4.1"
+}
