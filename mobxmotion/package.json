@@ -6,28 +6,19 @@
     "type": "git",
     "url": "https://github.com/pie6k/mobxmotion.git"
   },
-  "version": "1.0.6",
+  "version": "1.0.0",
   "type": "module",
   "author": {
     "name": "Adam Pietrasiak"
   },
-  "description": "An opinionated and joyful library for writing semantic, composable, and reusable styles in React using styled-components. Features chainable style composers, inline components, theming system, and automated style variants.",
+  "description": "Performant, zero-re-render animations for React using MobX.",
   "keywords": [
     "react",
-    "styled-components",
-    "css-in-js",
-    "styling",
-    "theme",
-    "semantic-styling",
-    "composable-styles",
-    "inline-components",
-    "style-composers",
-    "flexbox",
-    "grid",
-    "animations",
-    "colors",
-    "typography",
-    "design-system"
+    "mobx",
+    "animation",
+    "spring",
+    "motion",
+    "animations"
   ],
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.es.js",
@@ -49,12 +40,9 @@
     "@types/node": "^22.13.11",
     "@types/react": "*",
     "@types/react-dom": "*",
-    "@types/styled-components": "*",
-    "mobx-react": "^9.2.0",
     "prettier": "^3.0.3",
     "react": "*",
     "react-dom": "*",
-    "styled-components": "*",
     "typescript": "*",
     "vite": "^4.4.9",
     "vite-plugin-dts": "^4.5.3",
@@ -64,14 +52,12 @@
     "dist"
   ],
   "dependencies": {
-    "color": "^5.0.0",
-    "csstype": "^3.1.3",
     "fast-equals": "^5.2.2",
     "mobx": "^6.13.7"
   },
   "peerDependencies": {
-    "react": "*",
-    "styled-components": "*"
+    "mobx": "*",
+    "react": "*"
   },
   "packageManager": "yarn@4.4.1"
 }
