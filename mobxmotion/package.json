@@ -40,6 +40,7 @@
     "@types/node": "^22.13.11",
     "@types/react": "*",
     "@types/react-dom": "*",
+    "mobx": "*",
     "prettier": "^3.0.3",
     "react": "*",
     "react-dom": "*",
@@ -51,9 +52,6 @@
   "files": [
     "dist"
   ],
-  "dependencies": {
-    "mobx": "*"
-  },
   "peerDependencies": {
     "mobx": "*",
     "react": "*"
