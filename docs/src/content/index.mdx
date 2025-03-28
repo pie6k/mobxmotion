@@ -1,98 +1,172 @@
-import { Bleed } from "nextra/components";
+# Quick Start
 
-# Quick start
+`mobxmotion` allows you to animate elements using `mobx` without re-rendering the parent component.
 
-`mobxmotion` is an opinionated and joyful library that helps you write semantic, composable, reusable styles using `React` and `styled-components`.
+`mobxmotion.div` is a drop-in replacement for a normal `div`, except its `style` prop can include getters.
 
-It is battle-tested and used in production at [Screen Studio](https://screen.studio).
+If a getter is present, the given style value will be re-evaluated and updated when mobx detects a change, but the parent component will not re-render.
 
-## Goals & Motivation
-
-- Joyful and productive developer experience
-- Easy to maintain a consistent design language
-- Allows rapid iterations over UI code
-- Semantic styling - i.e., code should not only describe how something looks, but also what it is
-- Good debugging experience in devtools
-- Makes opinionated and automated choices on common styling patterns
-- Simple, chainable, composable API that is enjoyable to use
-- Automate some styling tasks (e.g., generate hover color variants)
-
-import { Steps } from "nextra/components";
-
-## Quick start
-
-Install `mobxmotion` and use it to start styling your applications.
-
-<Steps>
-### Install `mobxmotion`
-
-```sh npm2yarn
-npm i mobxmotion
+```bash
+yarn add mobxmotion
+# or
+npm install mobxmotion
+# or
+pnpm add mobxmotion
 ```
 
-### Compose your first styles
+## Example
 
-```tsx filename="styles.ts" {4, 8}
-import { $flex, $animation } from "mobxmotion";
+Let's say we have some observable `x` value and we want to use it to set the `transform` style of a `div`.
 
-// Compose styles using chainable API
-$flex.horizontal.alignCenter.gap(2);
+```tsx
+import { mobxmotion } from "mobxmotion";
+import { observable } from "mobx";
 
-// Create reusable styles and organize them how you like
-const animations = {
-  $fadeIn: $animation.properties({ opacity: [0, 1] }).duration("100ms").easeInOut,
+const x = observable.box(0);
+
+export function Demo() {
+  useSomeHeavyComputation(); // Render is expensive
+
+  return (
+    <mobxmotion.div
+      style={{
+        // Use getter instead of regular value
+        // transform: `translate(${x.get()}px, 0)`,
+        get transform() {
+          return `translate(${x.get()}px, 0)`;
+        },
+      }}
+    >
+      <button
+        onClick={() => {
+          x.set(randomInt(0, 300));
+        }}
+      >
+        Set random x position
+      </button>
+    </mobxmotion.div>
+  );
+}
+```
+
+When observable `x` changes, `style.transform` will be re-evaluated and updated, but the component itself will not re-render.
+
+## Example with spring animation
+
+In the example above, when `x` changes, the component will instantly move to the new position.
+
+We can easily use spring animation to make the movement smooth.
+
+The only change we need to make is to pass `x` value through `$spring` function inside the getter.
+
+Change this:
+
+```tsx
+      style={{
+        get transform() {
+          const transformX = x.get();
+
+          return `translate(${transformX}px, 0)`;
+        },
+      }}
+```
+
+To this:
+
+```tsx
+      style={{
+        get transform() {
+          const transformX = $spring(x.get());
+
+          return `translate(${transformX}px, 0)`;
+        },
+      }}
+```
+
+And that's it! Now when `x` changes, transform will be animated to the new value. Component will not re-render during the animation.
+
+The full example with spring animation:
+
+```tsx
+import { mobxmotion, $spring } from "mobxmotion";
+import { observable } from "mobx";
+
+const x = observable.box(0);
+
+export function Demo() {
+  return (
+    <mobxmotion.div
+      style={{
+        get transform() {
+          const transformX = $spring(x.get());
+
+          return `translate(${transformX}px, 0)`;
+        },
+      }}
+    >
+      <button
+        onClick={() => {
+          x.set(randomInt(0, 300));
+        }}
+      >
+        Random x position
+      </button>
+    </mobxmotion.div>
+  );
+}
+```
+
+`$spring` also accepts 2nd argument, `springConfig` which allows you to customize the spring animation.
+
+```tsx
+const SPRING_CONFIG: SpringConfigInput = {
+  stiffness: 100,
+  damping: 10,
+  mass: 1,
 };
+
+// Inside the getter:
+const transformX = $spring(x.get(), SPRING_CONFIG);
 ```
 
-### Pass your styles to your styled components
+It is recommended to define spring config outside of the getter to make it faster for the animator to determine if the config needs to be updated.
 
-```tsx filename="Component.tsx" {6-7}
-import styled from "styled-components";
-import { $flex } from "mobxmotion";
-import { animations } from "./styles";
-
-const Intro = styled.div`
-  ${animations.$fadeIn};
-  ${$flex.horizontal.alignCenter.gap(2)};
-`;
-
-function App() {
-  return <Intro>Hello World</Intro>;
-}
-```
-
-### Pass styles to inline components for rapid iteration and reduced boilerplate
-
-```tsx filename="Component.tsx" {6,8}
-import { UI, $flex } from "mobxmotion";
-import { animations } from "./styles";
-
-function App() {
-  return <UI.div styles={[animations.$fadeIn, $flex.horizontal.alignCenter.gap(2)]}>Hello World</UI.div>;
-}
-```
-
-Inline components accept all the same props as the regular `div`, `span`, `button`, etc. tags.
-
-### Create named inline components for more semantic styling
-
-Next to "how it looks," define "what it is" by naming your inline components. The name will also be visible in devtools for a better debugging experience.
-
-```tsx filename="Component.tsx" {6,8}
-import { UI, $flex } from "mobxmotion";
-import { animations } from "./styles";
-
-function App() {
-  return <UI.MyAppIntro styles={[animations.$fadeIn, $flex.horizontal.alignCenter.gap(2)]}>Hello World</UI.MyAppIntro>;
-}
-```
-
-You can dynamically access `UI.AnyComponentNameYouWant` as needed. Dynamic components are cached. For one name, the component will be created only once.
-
-You can use the convention `UI.Name_tag`, e.g., `UI.MyLink_a`, to create components with a different tag than `div`. (TypeScript will automatically infer the correct types based on this convention)
-
-</Steps>
+> [!NOTE]
+>
+> `$spring` calls inside getters have to follow same rules as React hooks.
+>
+> They cannot be called conditionally, they have to be called on every getter call. You can use multiple `$spring` calls in one getter, but you have to call it the same number of times in every getter call.
 
 ---
 
-There are many more powerful features to discover. Check out the next section to learn more.
+All the other props are exactly the same as in normal `div`.
+
+You can still use regular styles, without getters, as you would do with a normal `div`.
+
+Every existing `div` can be replaced with `mobxmotion.div` without any changes to the code.
+
+You can also use `mobxmotion.p`, `mobxmotion.span`, `mobxmotion.button`, etc. for every `HTML` and `SVG` element.
+
+## License
+
+MIT License
+
+Copyright (c) 2024 Adam Pietrasiak
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
