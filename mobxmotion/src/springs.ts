@@ -4,37 +4,37 @@ import { SpringConfigInput } from "./springConfig";
 import { getElementOwnerWindow } from "./utils";
 
 interface CurrentlyComputingStyleProperty {
-  manager: SpringsManager | null;
+  springsManager: SpringsManager | null;
   property: string;
   springIndex: number;
 }
 
 let currentlyComputingStyleProperty: CurrentlyComputingStyleProperty = {
-  manager: null,
+  springsManager: null,
   property: "",
   springIndex: 0,
 };
 
 type ElementRef = RefObject<Element | null>;
 
-export function setCurrentlyComputingStyleProperty(manager: SpringsManager, property: string) {
-  currentlyComputingStyleProperty.manager = manager;
+export function setCurrentlyComputingStyleProperty(springsManager: SpringsManager, property: string) {
+  currentlyComputingStyleProperty.springsManager = springsManager;
   currentlyComputingStyleProperty.property = property;
   currentlyComputingStyleProperty.springIndex = 0;
 }
 
 export function clearCurrentlyComputingStyleProperty() {
-  currentlyComputingStyleProperty.manager = null;
+  currentlyComputingStyleProperty.springsManager = null;
   currentlyComputingStyleProperty.property = "";
   currentlyComputingStyleProperty.springIndex = 0;
 }
 
 export function $spring(value: number, options?: SpringConfigInput): number {
-  if (!currentlyComputingStyleProperty.manager) {
+  if (!currentlyComputingStyleProperty.springsManager) {
     throw new Error("mobxSpring can only be used inside a MobxMotion component");
   }
 
-  const springValue = currentlyComputingStyleProperty.manager.getSpringValue(
+  const springValue = currentlyComputingStyleProperty.springsManager.getSpringValue(
     currentlyComputingStyleProperty.property,
     currentlyComputingStyleProperty.springIndex,
     value,

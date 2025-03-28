@@ -25,11 +25,11 @@ export function createMobxMotionComponent<ElementType extends HTMLOrSVGElement>(
     forwardedRef,
   ) {
     const ref = useInnerForwardRef(forwardedRef);
-    const [manager] = useState(() => new SpringsManager(ref));
+    const [springsManager] = useState(() => new SpringsManager(ref));
 
     useIsomorphicLayoutEffect(() => {
       if (!style) {
-        manager.clear();
+        springsManager.clear();
         return;
       }
 
@@ -39,7 +39,7 @@ export function createMobxMotionComponent<ElementType extends HTMLOrSVGElement>(
 
       return reaction(
         () => {
-          return computeStyleAndVariables(style, manager);
+          return computeStyleAndVariables(style, springsManager);
         },
         (stylesAndVariables, previousStylesAndVariables) => {
           const changedProperties = getChangedProperties(stylesAndVariables, previousStylesAndVariables);
@@ -55,7 +55,7 @@ export function createMobxMotionComponent<ElementType extends HTMLOrSVGElement>(
         // not unmounting
         if (ref.current) return;
 
-        manager.clear();
+        springsManager.clear();
       };
     }, []);
 
@@ -68,7 +68,7 @@ export function createMobxMotionComponent<ElementType extends HTMLOrSVGElement>(
         style={untracked(() => {
           if (!style) return undefined;
 
-          return computeStyleAndVariables(style, manager);
+          return computeStyleAndVariables(style, springsManager);
         })}
       />
     );
