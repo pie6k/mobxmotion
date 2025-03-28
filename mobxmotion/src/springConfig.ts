@@ -1,5 +1,3 @@
-import { assert } from "./assert";
-
 export interface SpringConfig {
   /**
    * It tells how much "target value" wants to bring current value to itself.
@@ -56,7 +54,15 @@ export function resolveSpringConfigInput(input?: SpringConfigInput): SpringConfi
 }
 
 export function validateSpringConfig(input: SpringConfig) {
-  assert(input.mass! >= 0, "Mass value must be greater or equal 0");
-  assert(input.stiffness! > 0, "Stiffness value must be greater than 0");
-  assert(input.precision > 0, "Precision must be greater than 0");
+  if (input.mass! < 0) {
+    throw new Error("Mass value must be greater or equal 0");
+  }
+
+  if (input.stiffness! <= 0) {
+    throw new Error("Stiffness value must be greater than 0");
+  }
+
+  if (input.precision! <= 0) {
+    throw new Error("Precision must be greater than 0");
+  }
 }

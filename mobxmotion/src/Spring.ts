@@ -1,6 +1,7 @@
-import { SpringConfig, SpringConfigInput, resolveSpringConfigInput, validateSpringConfig } from "./config";
+import { SpringConfig, SpringConfigInput, resolveSpringConfigInput, validateSpringConfig } from "./springConfig";
 
-import { stepSpring } from "./step";
+import { createAtom } from "mobx";
+import { stepSpring } from "./springStep";
 
 function getIsValidNumber(input: number) {
   if (typeof input !== "number") return false;
@@ -31,16 +32,27 @@ export function calculatePrecission(from: number, to: number, precisionBase: num
  *
  * Note: this will be called extremely often and needs to be well optimized
  */
-export class NumberSpring {
+export class Spring {
   public config: SpringConfig;
 
   public time: number = 0; // Current time along the spring curve in ms (zero-based)
 
+  private valueAtom = createAtom("NumberSpring");
+
   private _value: number; // the current value of the spring
 
   get value() {
+    this.valueAtom.reportObserved();
     return this._value;
   }
+
+  set value(value: number) {
+    if (this._value === value) return;
+
+    this._value = value;
+    this.valueAtom.reportChanged();
+  }
+
   public currentVelocity: number = 0; // the current velocity of the spring
 
   public targetValue: number;
@@ -68,7 +80,7 @@ export class NumberSpring {
   }
 
   snapToTarget(target = this.targetValue) {
-    this._value = target;
+    this.value = target;
     this.targetValue = target;
     this.currentVelocity = 0;
   }
@@ -127,7 +139,7 @@ export class NumberSpring {
       return;
     }
 
-    [this._value, this.currentVelocity] = stepSpring(
+    [this.value, this.currentVelocity] = stepSpring(
       dt,
       this._value,
       this.currentVelocity,

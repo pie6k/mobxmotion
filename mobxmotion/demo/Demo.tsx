@@ -1,7 +1,6 @@
 import { $spring, mobxmotion } from "@/index";
 import React, { useEffect, useRef } from "react";
-
-import { observable } from "mobx";
+import { observable, runInAction } from "mobx";
 
 const value = observable.box(0);
 
@@ -34,7 +33,9 @@ export function Demo() {
     >
       <button
         onClick={() => {
-          value.set(randomInt(0, 300));
+          runInAction(() => {
+            value.set(randomInt(0, 300));
+          });
         }}
       >
         Random

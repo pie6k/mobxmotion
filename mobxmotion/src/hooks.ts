@@ -1,16 +1,5 @@
-import { ForwardedRef, RefObject, useCallback, useMemo, useRef } from "react";
-
-export function useFreshValueGetter<T>(value: T) {
-  const ref = useRef(value);
-  ref.current = value;
-  return useCallback(() => ref.current, []);
-}
-
-export function useCurrentValueRef<T>(value: T) {
-  const ref = useRef(value);
-  ref.current = value;
-  return ref;
-}
+import { DependencyList, useLayoutEffect } from "react";
+import { ForwardedRef, RefObject, useMemo } from "react";
 
 export function applyValueToForwardedRef<T>(forwardedRef: ForwardedRef<T>, value: T) {
   if (typeof forwardedRef === "function") {
@@ -36,4 +25,14 @@ export function useInnerForwardRef<T>(forwardedRef: ForwardedRef<T>) {
   }, [forwardedRef]);
 
   return innerRefObject;
+}
+
+const IS_SERVER = typeof window === "undefined";
+
+export function useIsomorphicLayoutEffect(effect: () => void, deps: DependencyList) {
+  if (IS_SERVER) return;
+
+  useLayoutEffect(() => {
+    effect();
+  }, deps);
 }

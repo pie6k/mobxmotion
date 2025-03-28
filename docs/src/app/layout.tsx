@@ -8,7 +8,7 @@ import { GlobalStylings } from "./GlobalStylings";
 import { getPageMap } from "nextra/page-map";
 
 export const metadata = {
-  metadataBase: new URL("https://mobxmotion.dev"),
+  metadataBase: new URL("https://mobxmotion.com"),
   title: {
     template: "%s - mobxmotion",
   },
@@ -23,17 +23,17 @@ export const metadata = {
   //   "msapplication-TileColor": "#fff",
   // },
   twitter: {
-    site: "https://mobxmotion.dev",
+    site: "https://mobxmotion.com",
     card: "summary_large_image",
   },
   openGraph: {
     type: "website",
-    url: "https://mobxmotion.dev",
+    url: "https://mobxmotion.com",
     title: "mobxmotion",
     description: "mobxmotion: joyful styling for React and Styled Components",
     images: [
       {
-        url: "https://mobxmotion.dev/opengraph-image.png",
+        url: "https://mobxmotion.com/opengraph-image.png",
         width: 1200,
         height: 630,
         alt: "mobxmotion",

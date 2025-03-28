@@ -3610,13 +3610,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-equals@npm:^5.2.2":
-  version: 5.2.2
-  resolution: "fast-equals@npm:5.2.2"
-  checksum: 10c0/2bfeac6317a8959a00e2134749323557e5df6dea3af24e4457297733eace8ce4313fcbca2cf4532f3a6792607461e80442cd8d3af148d5c2e4e98ad996d6e5b5
-  languageName: node
-  linkType: hard
-
 "fast-glob@npm:^3.3.2":
   version: 3.3.3
   resolution: "fast-glob@npm:3.3.3"
@@ -5413,7 +5406,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mobx@npm:^6.13.7":
+"mobx@npm:*":
   version: 6.13.7
   resolution: "mobx@npm:6.13.7"
   checksum: 10c0/3ae7f8c586a48a0a2b9b4900871455bc93d3878bdff70b6820ba830c6b883d7f8a0222aa2a0fec7201d25f38a19cb340e62a18a3939182a676dc35d857f35dd6
@@ -5446,8 +5439,7 @@ __metadata:
     "@types/node": "npm:^22.13.11"
     "@types/react": "npm:*"
     "@types/react-dom": "npm:*"
-    fast-equals: "npm:^5.2.2"
-    mobx: "npm:^6.13.7"
+    mobx: "npm:*"
     prettier: "npm:^3.0.3"
     react: "npm:*"
     react-dom: "npm:*"
