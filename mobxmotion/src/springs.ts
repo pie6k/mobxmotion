@@ -84,7 +84,7 @@ export class SpringsManager {
     return spring.value;
   }
 
-  destroy() {
+  clear() {
     for (const springs of this.springs.values()) {
       for (const spring of springs) {
         spring.stop();

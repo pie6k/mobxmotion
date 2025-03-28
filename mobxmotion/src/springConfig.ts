@@ -39,8 +39,8 @@ export interface SpringConfig {
 export type SpringConfigInput = Partial<SpringConfig>;
 
 export const DEFAULT_SPRING_CONFIG: SpringConfig = {
-  stiffness: 90,
-  damping: 9,
+  stiffness: 300,
+  damping: 30,
   mass: 1,
   clamp: false,
   precision: 0.002,

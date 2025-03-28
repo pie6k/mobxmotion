@@ -27,8 +27,13 @@ export function createMobxMotionComponent<ElementType extends HTMLOrSVGElement>(
     const ref = useInnerForwardRef(forwardedRef);
     const [manager] = useState(() => new SpringsManager(ref));
 
+    console.log("manager", manager);
+
     useIsomorphicLayoutEffect(() => {
-      if (!style) return;
+      if (!style) {
+        manager.clear();
+        return;
+      }
 
       const element = ref.current;
 
@@ -52,7 +57,7 @@ export function createMobxMotionComponent<ElementType extends HTMLOrSVGElement>(
         // not unmounting
         if (ref.current) return;
 
-        manager.destroy();
+        manager.clear();
       };
     }, []);
 
