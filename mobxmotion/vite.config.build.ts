@@ -5,8 +5,8 @@ import { resolve } from "path";
 
 function collectExternalDependencies() {
   const packageJson = fs.readFileSync(resolve(__dirname, "package.json"), "utf8");
-  const dependencies = JSON.parse(packageJson).dependencies;
-  const peerDependencies = JSON.parse(packageJson).peerDependencies;
+  const dependencies = JSON.parse(packageJson).dependencies ?? {};
+  const peerDependencies = JSON.parse(packageJson).peerDependencies ?? {};
   return Object.keys(dependencies).concat(Object.keys(peerDependencies));
 }
 

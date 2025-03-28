@@ -5,8 +5,8 @@ import { raf } from "./utils";
 export class AnimatedSpring extends Spring {
   constructor(
     initialValue: number,
-    config: SpringConfigInput,
-    private targetWindow: Window,
+    config?: SpringConfigInput,
+    private targetWindow?: Window | null,
   ) {
     super(initialValue, config);
   }
