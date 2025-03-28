@@ -27,8 +27,6 @@ export function createMobxMotionComponent<ElementType extends HTMLOrSVGElement>(
     const ref = useInnerForwardRef(forwardedRef);
     const [manager] = useState(() => new SpringsManager(ref));
 
-    console.log("manager", manager);
-
     useIsomorphicLayoutEffect(() => {
       if (!style) {
         manager.clear();
