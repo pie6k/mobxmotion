@@ -56,13 +56,17 @@ export function computeStyleAndVariables(
   const computedStyles: StyleWithTransforms = {};
 
   for (const key in style) {
-    setCurrentlyComputingStyleProperty(springsManager, key);
-
     try {
+      setCurrentlyComputingStyleProperty(springsManager, key);
+      /**
+       * style[key] can be a getter
+       */
       // @ts-ignore
       computedStyles[key] = style[key];
-    } finally {
       clearCurrentlyComputingStyleProperty();
+    } catch (error) {
+      clearCurrentlyComputingStyleProperty();
+      throw error;
     }
   }
 

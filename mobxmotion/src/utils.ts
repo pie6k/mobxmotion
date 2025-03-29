@@ -1,3 +1,5 @@
+import { action } from "mobx";
+
 export function getElementOwnerWindow(element: Element) {
   return element.ownerDocument.defaultView;
 }
@@ -38,7 +40,7 @@ export function raf(targetWindow: Window = window) {
   if (promise) return promise;
 
   promise = new Promise<number>((resolve) => {
-    targetWindow.requestAnimationFrame(resolve);
+    targetWindow.requestAnimationFrame(action(resolve));
   }).finally(() => {
     currentRafPromise.delete(targetWindow);
   });

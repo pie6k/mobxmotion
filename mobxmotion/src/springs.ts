@@ -79,13 +79,27 @@ export class SpringsManager {
     return spring.value;
   }
 
-  clear() {
-    for (const springs of this.springs.values()) {
+  clearUnused(usedProperties: string[]) {
+    for (let [property, springs] of this.springs.entries()) {
+      if (usedProperties.includes(property)) continue;
+
+      springs = [...springs];
+
+      this.springs.delete(property);
+
       for (const spring of springs) {
         spring.stop();
       }
     }
+  }
+
+  clear() {
+    const springs = [...this.springs.values()].flat();
 
     this.springs.clear();
+
+    for (const spring of springs) {
+      spring.stop();
+    }
   }
 }

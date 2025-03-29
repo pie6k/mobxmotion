@@ -33,6 +33,8 @@ export function createMobxMotionComponent<ElementType extends HTMLOrSVGElement>(
         return;
       }
 
+      springsManager.clearUnused(Object.keys(style));
+
       const element = ref.current;
 
       if (!element) return;

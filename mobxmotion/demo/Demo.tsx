@@ -1,6 +1,10 @@
 import { $spring, mobxmotion } from "@/index";
 import React, { useEffect, useRef } from "react";
-import { observable, runInAction } from "mobx";
+import { configure, observable, runInAction } from "mobx";
+
+configure({
+  enforceActions: "always",
+});
 
 const value = observable.box(0);
 
@@ -25,9 +29,8 @@ export function Demo() {
     <mobxmotion.div
       style={{
         willChange: "transform",
-        get transform() {
-          const x = $spring(value.get());
-          return `translate(${x}px, 0)`;
+        get x() {
+          return $spring(value.get());
         },
       }}
     >

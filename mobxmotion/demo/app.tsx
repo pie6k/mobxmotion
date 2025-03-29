@@ -1,5 +1,3 @@
-// import "./dev";
-
 import { Demo } from "./Demo";
 import React from "react";
 import { createRoot } from "react-dom/client";
