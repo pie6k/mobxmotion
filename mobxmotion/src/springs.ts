@@ -25,13 +25,11 @@ export function setCurrentlyComputingStyleProperty(springsManager: SpringsManage
 
 export function clearCurrentlyComputingStyleProperty() {
   currentlyComputingStyleProperty.springsManager = null;
-  currentlyComputingStyleProperty.property = "";
-  currentlyComputingStyleProperty.springIndex = 0;
 }
 
 export function $spring(value: number, options?: SpringConfigInput): number {
   if (!currentlyComputingStyleProperty.springsManager) {
-    throw new Error("mobxSpring can only be used inside a MobxMotion component");
+    throw new Error("$spring can only be used inside style getters of MobxMotion components");
   }
 
   const springValue = currentlyComputingStyleProperty.springsManager.getSpringValue(

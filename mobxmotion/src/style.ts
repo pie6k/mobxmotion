@@ -49,16 +49,21 @@ function resolveStyleInput(style: StyleWithTransforms): StyleAndVariables {
   return cssProperties;
 }
 
-export function computeStyleAndVariables(style: StyleWithTransforms, springs: SpringsManager): StyleAndVariables {
+export function computeStyleAndVariables(
+  style: StyleWithTransforms,
+  springsManager: SpringsManager,
+): StyleAndVariables {
   const computedStyles: StyleWithTransforms = {};
 
   for (const key in style) {
-    setCurrentlyComputingStyleProperty(springs, key);
+    setCurrentlyComputingStyleProperty(springsManager, key);
 
-    // @ts-ignore
-    computedStyles[key] = style[key];
-
-    clearCurrentlyComputingStyleProperty();
+    try {
+      // @ts-ignore
+      computedStyles[key] = style[key];
+    } finally {
+      clearCurrentlyComputingStyleProperty();
+    }
   }
 
   return resolveStyleInput(computedStyles);
