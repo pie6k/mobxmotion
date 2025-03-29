@@ -32,16 +32,12 @@ export function $spring(value: number, options?: SpringConfigInput): number {
     throw new Error("$spring can only be used inside style getters of MobxMotion components");
   }
 
-  const springValue = currentlyComputingStyleProperty.springsManager.getSpringValue(
+  return currentlyComputingStyleProperty.springsManager.getSpringValue(
     currentlyComputingStyleProperty.property,
-    currentlyComputingStyleProperty.springIndex,
+    currentlyComputingStyleProperty.springIndex++,
     value,
     options,
   );
-
-  currentlyComputingStyleProperty.springIndex++;
-
-  return springValue;
 }
 
 const EMPTY_SPRING_CONFIG: SpringConfigInput = {};
@@ -58,6 +54,7 @@ export class SpringsManager {
   getSpringValue(property: string, springIndex: number, value: number, options?: SpringConfigInput): number {
     const element = this.element;
 
+    // It is likely the first render, don't initialize spring yet. Simply return input value.
     if (!element) {
       return value;
     }
